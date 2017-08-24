@@ -1,0 +1,52 @@
+ <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+			<title>chat</title>
+			<style>
+				#zone_chat strong {
+					color: blue;
+					background-color:black;
+					padding: 2px;
+				}
+			</style>	
+			
+	</head>
+
+ <body>
+ <h1> chat website </h1>
+ <section id="section"> </section>
+ <div id="future"></div>
+ 		<form  id="form " action="" method="post">
+ 		<input id="message" name="message" type="text" placeholder="type here .." />
+ 		<input id="send" type="submit" value="send" />
+ 		</form> 
+ 		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+ 	<script src="/socket.io/socket.io.js">     </script>
+ 	<script > 
+ 			var socket = io.connect('http://localhost:8080');
+
+ 			io.sockets.on('broad', function(data){ 
+$('#future').append(data + "<br/>"); 
+			});
+
+$('form').submit(function(e){ 
+e.preventDefault();
+var message = $('#message').val();
+socket.emit('message ' , message);
+}); 
+
+ 		/*	$('#form').submit(function(){
+ 				socket.emit('message',$('#input').val());
+ 				return false
+ 			}) */
+
+ 	/*socket.on('message', function(data) { 
+ 		alert('message du serveur  ' + data);
+ 		console.log(data);
+ 		socket.emit('my other event' , { my: 'data'})  
+ 	}); */ 
+ 	</script>
+ </body>
+</html>
