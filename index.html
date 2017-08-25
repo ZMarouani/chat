@@ -13,29 +13,73 @@
 			
 	</head>
 
- <body>
+<body>
  <h1> chat website </h1>
- <section id="section"> </section>
- <div id="future"></div>
- 		<form  id="form " action="" method="post">
- 		<input id="message" name="message" type="text" placeholder="type here .." />
- 		<input id="send" type="submit" value="send" />
- 		</form> 
- 		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
- 	<script src="/socket.io/socket.io.js">     </script>
- 	<script > 
- 			var socket = io.connect('http://localhost:8080');
 
- 			io.sockets.on('broad', function(data){ 
+ 
+
+ <div id="future"></div>
+ 		<form  id="form"   action=""      method="post">
+
+ 		<input id="message" name="message" type="text"    placeholder="type here .." size="30"  autofocus />
+ 		<input id="send"    type="submit"  value="send" />
+ 		
+ 		</form> 
+
+ 		<section id="zone_chat"> </section>
+ 		
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+ 	<script src="/socket.io/socket.io.js">     </script>
+ 	
+ 	<script > 
+ 	
+
+ var socket = io.connect('http://localhost:8080');
+
+//pseudo : read & send to serv for broadcst
+var pseudo = prompt('what\'s your name?');
+socket.emit('new client', pseudo);
+//document.title = pseudo +'-'+document.title;
+
+socket.on('new_client',function(pseudo){
+	console.log('==> '+pseudo)
+	$('#zone_chat').prepend('<p><em>' + pseudo + ' a rejoint le Chat !</em></p>');
+				console.log('user is here!');
+
+});
+//msg: read & send 4 brdcst
+socket.on('message', function(data){
+insertMsg(data.pseudo , data.message)
+			console.log('read msg ');
+
+});
+
+$('#form').submit(function () { 
+var message =$('#message').val();
+socket.emit('message' , message);
+insertMsg(pseudo, message);
+$('#message').val('').focus();
+return false //??
+
+});
+
+
+function insertMsg(pseudo , message) { 
+$('#zone_chat').prepend('<p><strong>'+ pseudo+ '</strong> ' + message + '</p>');}
+
+
+
+
+  /* io.sockets.on('broad', function(data){ 
 $('#future').append(data + "<br/>"); 
 			});
 
-$('form').submit(function(e){ 
-e.preventDefault();
+$('form').submit(function(e){e.preventDefault();
+
 var message = $('#message').val();
 socket.emit('message ' , message);
-}); 
+}); */
 
  		/*	$('#form').submit(function(){
  				socket.emit('message',$('#input').val());
